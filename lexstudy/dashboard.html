@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LexStudy Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">⚖️ LexStudy</div>
+    <div class="nav-links" id="navLinks"></div>
+    <hr>
+    <button id="backupBtn"><i class="fa-solid fa-file-export"></i> Backup JSON</button>
+    <input id="restoreFile" type="file" accept="application/json" />
+    <button id="logoutBtn" class="btn-danger">Logout</button>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <input id="globalSearch" class="search" placeholder="Global search notes, cases, subjects, tasks..." />
+      <button id="themeToggle" class="btn-secondary">🌓</button>
+    </div>
+
+    <section id="dashboard" class="section active"></section>
+    <section id="subjects" class="section"></section>
+    <section id="notes" class="section"></section>
+    <section id="cases" class="section"></section>
+    <section id="quiz" class="section"></section>
+    <section id="planner" class="section"></section>
+    <section id="bareact" class="section"></section>
+    <section id="search" class="section"></section>
+  </main>
+</div>
+<div id="toasts" class="toast-wrap"></div>
+<script type="module" src="js/dashboard.js"></script>
+</body>
+</html>
