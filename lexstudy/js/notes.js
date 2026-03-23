@@ -4,10 +4,10 @@ export function renderNotes(root) {
   const db = getDB();
   root.innerHTML = `
   <div class='card'>
-    <h2>Notes</h2>
+    <div class='section-title'><div><h2>Revision Notes</h2><p class='muted'>Build concise notes for vocab, legal maxims, RC summaries, GK, and shortcut methods.</p></div></div>
     <div class='row'>
       <div class='col-4'><input id='noteTitle' placeholder='Note title'></div>
-      <div class='col-4'><select id='noteSubject'><option value=''>Subject</option>${db.subjects.map(s=>`<option>${s.name}</option>`).join('')}</select></div>
+      <div class='col-4'><select id='noteSubject'><option value=''>Track</option>${db.subjects.map(s=>`<option>${s.name}</option>`).join('')}</select></div>
       <div class='col-4'><input id='noteSearch' placeholder='Search notes'></div>
       <div class='col-12'>
         <div class='editor-toolbar'>
@@ -19,7 +19,7 @@ export function renderNotes(root) {
       </div>
       <div class='col-12 actions'>
         <button id='saveNote'>Save Note</button>
-        <button id='exportPdf' class='btn-secondary'>Export as PDF (Simulated)</button>
+        <button id='exportPdf' class='btn-secondary'>Export Snapshot</button>
       </div>
     </div>
     <div id='noteList'></div>
@@ -36,7 +36,7 @@ export function renderNotes(root) {
     const q = root.querySelector('#noteSearch').value.toLowerCase();
     const s = root.querySelector('#noteSubject').value;
     const list = db.notes.filter(n => (!q || n.title.toLowerCase().includes(q) || n.body.toLowerCase().includes(q)) && (!s || n.subject === s));
-    root.querySelector('#noteList').innerHTML = list.map(n => `<div class='list-item'><div><b>${n.title}</b> <span class='tag'>${n.subject||'General'}</span><div>${n.body}</div><small>${new Date(n.ts).toLocaleString()}</small></div><div class='actions'><button data-edit='${n.id}' class='btn-secondary'>Edit</button><button data-del='${n.id}' class='btn-danger'>Delete</button></div></div>`).join('') || '<p>No notes found.</p>';
+    root.querySelector('#noteList').innerHTML = list.map(n => `<div class='list-item'><div><b>${n.title}</b> <span class='tag'>${n.subject||'General'}</span><div>${n.body}</div><small>${new Date(n.ts).toLocaleString()}</small></div><div class='actions'><button data-edit='${n.id}' class='btn-secondary'>Edit</button><button data-del='${n.id}' class='btn-danger'>Delete</button></div></div>`).join('') || '<p class="muted">No notes found.</p>';
     root.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
       if (!confirmAction('Delete note?')) return;
       db.notes = db.notes.filter(n => n.id !== b.dataset.del); setDB(db); draw();
@@ -55,7 +55,7 @@ export function renderNotes(root) {
     root.querySelector('#noteTitle').value = ''; noteBody.innerHTML = ''; delete root.querySelector('#saveNote').dataset.id; localStorage.removeItem(draftKey); toast('Note saved.'); draw();
   };
 
-  root.querySelector('#exportPdf').onclick = () => toast('PDF exported (simulation).');
+  root.querySelector('#exportPdf').onclick = () => toast('Snapshot exported (browser simulation).');
   root.querySelector('#noteSearch').oninput = draw; root.querySelector('#noteSubject').onchange = draw;
   draw();
 }
