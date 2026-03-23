@@ -1,14 +1,16 @@
 import { getDB, setDB, toast } from './storage.js';
 
 const Q = [
-  { q: 'Which article guarantees equality before law?', options: ['Article 14', 'Article 19', 'Article 21', 'Article 32'], a: 0 },
-  { q: 'IPC stands for?', options: ['Indian Penal Code', 'International Procedure Code', 'Indian Public Charter', 'Internal Penal Charter'], a: 0 },
-  { q: 'Doctrine of basic structure comes from?', options: ['Golaknath', 'Kesavananda Bharati', 'Maneka Gandhi', 'Minerva Mills'], a: 1 }
+  { q: 'In CLAT legal reasoning, what should you do first?', options: ['Memorize outside law', 'Read the principle carefully', 'Guess based on fairness', 'Skip the passage'], a: 1 },
+  { q: 'Which area is most closely tested through short data-based passages in CLAT?', options: ['Quantitative Techniques', 'Essay Writing', 'Drafting', 'Mooting'], a: 0 },
+  { q: 'A strong current affairs revision strategy is to focus on:', options: ['Only headlines', 'Appointments, schemes, judgments, and context', 'Random facts without notes', 'Only sports news'], a: 1 },
+  { q: 'In reading comprehension, the best answer is usually the one that:', options: ['Sounds extreme', 'Matches the author tone and passage evidence', 'Uses difficult words', 'Adds outside knowledge'], a: 1 },
+  { q: 'For logical reasoning, a high-value habit is to:', options: ['Ignore assumptions', 'Track conclusion, premise, and inference gaps', 'Solve without reading options', 'Learn formulas only'], a: 1 }
 ];
 
 export function renderQuiz(root){
-  const db=getDB(); let idx=0, score=0, left=30; const questions=[...Q].sort(()=>Math.random()-.5);
-  root.innerHTML = `<div class='card'><h2>Quiz & Practice</h2><p id='timer'></p><div id='qBox'></div><div id='history'></div></div>`;
+  const db=getDB(); let idx=0, score=0, left=45; const questions=[...Q].sort(()=>Math.random()-.5);
+  root.innerHTML = `<div class='card'><div class='section-title'><div><h2>Sectional Quiz</h2><p class='muted'>Quick CLAT-style mixed practice for legal reasoning, English, GK, logic, and QT.</p></div></div><p id='timer'></p><div id='qBox'></div><div id='history'></div></div>`;
   const timerEl = root.querySelector('#timer');
   const qBox = root.querySelector('#qBox');
   const tick = setInterval(()=>{ left--; timerEl.textContent = `Time left: ${left}s`; if(left<=0){finish();}},1000);
@@ -22,9 +24,9 @@ export function renderQuiz(root){
 
   const finish=()=>{
     clearInterval(tick);
-    qBox.innerHTML = `<h3>Score: ${score}/${questions.length}</h3><p>${score>=2?'Great job!':'Keep practicing.'}</p>`;
+    qBox.innerHTML = `<h3>Score: ${score}/${questions.length}</h3><p>${score>=4?'Excellent pace—keep moving into mocks.':score>=2?'Good start—review weak areas and retry.':'Build fundamentals first, then attempt again.'}</p>`;
     db.quizHistory.unshift({ts:Date.now(), score, total:questions.length}); setDB(db);
-    root.querySelector('#history').innerHTML = '<h4>History</h4>' + db.quizHistory.slice(0,8).map(h=>`<div>${new Date(h.ts).toLocaleString()} - ${h.score}/${h.total}</div>`).join('');
+    root.querySelector('#history').innerHTML = '<h4>Recent attempts</h4>' + db.quizHistory.slice(0,8).map(h=>`<div>${new Date(h.ts).toLocaleString()} - ${h.score}/${h.total}</div>`).join('');
     toast('Quiz completed.');
   };
   draw();
